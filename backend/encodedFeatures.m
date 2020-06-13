@@ -1,6 +1,6 @@
 function features = encodedFeatures(method, image)
     switch method
-        case "BRISK"
+    case "BRISK"
         features = detectBRISKFeatures(image);
     case "BRISK"
         features = detectBRISKFeatures(image);
@@ -10,8 +10,6 @@ function features = encodedFeatures(method, image)
         features = detectHarrisFeatures(image);
     case "MinEigen"
         features = detectMinEigenFeatures(image);
-    case "MSER"
-        features = detectMSERFeatures(image);
     case "ORB"
         features = detectORBFeatures(image);
     case "SURF"
