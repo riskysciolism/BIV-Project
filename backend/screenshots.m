@@ -1,11 +1,11 @@
-%-Bild zurecht schneiden-------------------------------------------------------------------------------------------------
+%-Bild zurecht schneiden---------------------------------------------------------------------------
 
 preview = imshow(image);
 roi = drawrectangle;
 crop = imcrop(image,roi.Position);
 
 
-%-Umwandeln in Graustufenbild, falls nicht schon geschehen---------------------------------------------------------------
+%-Umwandeln in Graustufenbild, falls nicht schon geschehen-----------------------------------------
 
 if(size(target_image_data, 3) == 3)
     target_image_data_grey = rgb2gray(target_image_data);
@@ -14,7 +14,7 @@ else
 end
 
 
-%-Das ausgewählte Detektionsverfahren anwenden---------------------------------------------------------------------------
+%-Das ausgewählte Detektionsverfahren anwenden-----------------------------------------------------
 
 switch DetectionMethodDropDown.Value
     case "BRISK"
@@ -40,7 +40,7 @@ switch DetectionMethodDropDown.Value
 end
 
 
-%-Die gefundenen Feature Punkte anzeigen---------------------------------------------------------------------------------
+%-Die gefundenen Feature Punkte anzeigen-----------------------------------------------------------
 
 hold(ReferenceImage, "on");
 plot(referencePoints.selectStrongest(round(NumberofshownKeypointsSlider.Value)), ReferenceImage);
@@ -52,18 +52,18 @@ plot(targetPoints.selectStrongest(round(NumberofshownKeypointsSlider.Value)), Ta
 hold(TargetImage, "off");
 
 
-%-Feature Deskriptoren extrahieren---------------------------------------------------------------------------------------
+%-Feature Deskriptoren extrahieren-----------------------------------------------------------------
 
 [referenceFeatures, referencePoints] = extractFeatures(reference_image_data_grey, referencePoints);
 [targetFeatures, targetPoints] = extractFeatures(target_image_data_grey, targetPoints);
 
 
-%-Zueinander passende Punkte mithilfe der Deskriptoren finden------------------------------------------------------------
+%-Zueinander passende Punkte mithilfe der Deskriptoren finden--------------------------------------
 
 pairs = matchFeatures(referenceFeatures, targetFeatures);
 
 
-%-Vermeintlich übereinstimmende Merkmale anzeigen------------------------------------------------------------------------
+%-Vermeintlich übereinstimmende Merkmale anzeigen--------------------------------------------------
 
 matchedReferencePoints = referencePoints(pairs(:, 1), :);
 matchedTargetPoints = targetPoints(pairs(:, 2), :);
@@ -72,7 +72,7 @@ showMatchedFeatures(reference_image_data, target_image_data, matchedReferencePoi
 matchedTargetPoints, 'montage', "Parent", ResultImage);
 
 
-%-Transformation aus den übereinstimmende Merkmale berechnen und als Bounding Box anzeigen-------------------------------
+%-Transformation aus den übereinstimmende Merkmale berechnen und als Bounding Box anzeigen---------
 
 [tform, estimatedReferencePoints, estimatedTargetPoints] = ...
 estimateGeometricTransform(matchedReferencePoints, matchedTargetPoints, 'affine');
@@ -81,7 +81,7 @@ foundPolygon = [1, 1;...                                                        
                 size(reference_image_data, 2), 1;...                                % top-right
                 size(reference_image_data, 2), size(reference_image_data, 1);...    % bottom-right
                 1, size(reference_image_data, 1);...                                % bottom-left
-                1, 1];                                                              % top-left again to close the polygon
+                1, 1];                                                              % top-left
 
 newFoundPolygon = transformPointsForward(tform, foundPolygon);
 
@@ -91,4 +91,4 @@ line(ResultImage, newFoundPolygon(:, 1), newFoundPolygon(:, 2), 'Color', 'y');
 hold(ResultImage, "off");
 
 
-%------------------------------------------------------------------------------------------------------------------------
+%--------------------------------------------------------------------------------------------------
