@@ -37,6 +37,7 @@ switch DetectionMethodDropDown.Value
         targetPoints = detectSURFFeatures(target_image_data_grey);
     case "KAZE"
         referencePoints = detectKAZEFeatures(reference_image_data_grey);
+        targetPoints = detectKAZEFeatures(target_image_data_grey);
 end
 
 
